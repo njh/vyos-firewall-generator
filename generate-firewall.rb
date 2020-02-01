@@ -28,13 +28,13 @@ default_actions = {
 
 def puts_filewall_rules(name, protocol, default_action)
   raise "default_action is not set for #{name}" if default_action.nil?
-	name_dec = (protocol == 'ipv6' ? 'ipv6-name' : 'name')
-	puts "set firewall #{name_dec} #{name} default-action #{default_action}"
-	puts "set firewall #{name_dec} #{name} rule 1010 action accept"
-	puts "set firewall #{name_dec} #{name} rule 1010 state established enable"
-	puts "set firewall #{name_dec} #{name} rule 1010 state related enable"
-	puts "set firewall #{name_dec} #{name} rule 1020 action drop"
-	puts "set firewall #{name_dec} #{name} rule 1020 state invalid enable"
+  name_dec = (protocol == 'ipv6' ? 'ipv6-name' : 'name')
+  puts "set firewall #{name_dec} #{name} default-action #{default_action}"
+  puts "set firewall #{name_dec} #{name} rule 1010 action accept"
+  puts "set firewall #{name_dec} #{name} rule 1010 state established enable"
+  puts "set firewall #{name_dec} #{name} rule 1010 state related enable"
+  puts "set firewall #{name_dec} #{name} rule 1020 action drop"
+  puts "set firewall #{name_dec} #{name} rule 1020 state invalid enable"
 end
 
 zones.each_pair do  |zone, interfaces|
