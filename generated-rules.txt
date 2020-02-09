@@ -1,49 +1,24 @@
+# Globally enable stateful firewall
+set firewall state-policy established action accept
+set firewall state-policy related action accept
+set firewall state-policy invalid action drop
+
 # Zone PRIVATE
 set zone-policy zone PRIVATE description 'Private Zone'
 set zone-policy zone PRIVATE interface eth0
 set zone-policy zone PRIVATE interface eth1
 set firewall name PRIVATE-from-PUBLIC-v4 default-action reject
-set firewall name PRIVATE-from-PUBLIC-v4 rule 1010 action accept
-set firewall name PRIVATE-from-PUBLIC-v4 rule 1010 state established enable
-set firewall name PRIVATE-from-PUBLIC-v4 rule 1010 state related enable
-set firewall name PRIVATE-from-PUBLIC-v4 rule 1020 action drop
-set firewall name PRIVATE-from-PUBLIC-v4 rule 1020 state invalid enable
 set firewall ipv6-name PRIVATE-from-PUBLIC-v6 default-action reject
-set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1010 action accept
-set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1010 state established enable
-set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1010 state related enable
-set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1020 action drop
-set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1020 state invalid enable
 set zone-policy zone PRIVATE from PUBLIC firewall name PRIVATE-from-PUBLIC-v4
 set zone-policy zone PRIVATE from PUBLIC firewall ipv6-name PRIVATE-from-PUBLIC-v6
 
 set firewall name PRIVATE-from-DMZ-v4 default-action accept
-set firewall name PRIVATE-from-DMZ-v4 rule 1010 action accept
-set firewall name PRIVATE-from-DMZ-v4 rule 1010 state established enable
-set firewall name PRIVATE-from-DMZ-v4 rule 1010 state related enable
-set firewall name PRIVATE-from-DMZ-v4 rule 1020 action drop
-set firewall name PRIVATE-from-DMZ-v4 rule 1020 state invalid enable
 set firewall ipv6-name PRIVATE-from-DMZ-v6 default-action accept
-set firewall ipv6-name PRIVATE-from-DMZ-v6 rule 1010 action accept
-set firewall ipv6-name PRIVATE-from-DMZ-v6 rule 1010 state established enable
-set firewall ipv6-name PRIVATE-from-DMZ-v6 rule 1010 state related enable
-set firewall ipv6-name PRIVATE-from-DMZ-v6 rule 1020 action drop
-set firewall ipv6-name PRIVATE-from-DMZ-v6 rule 1020 state invalid enable
 set zone-policy zone PRIVATE from DMZ firewall name PRIVATE-from-DMZ-v4
 set zone-policy zone PRIVATE from DMZ firewall ipv6-name PRIVATE-from-DMZ-v6
 
 set firewall name PRIVATE-from-LOCAL-v4 default-action reject
-set firewall name PRIVATE-from-LOCAL-v4 rule 1010 action accept
-set firewall name PRIVATE-from-LOCAL-v4 rule 1010 state established enable
-set firewall name PRIVATE-from-LOCAL-v4 rule 1010 state related enable
-set firewall name PRIVATE-from-LOCAL-v4 rule 1020 action drop
-set firewall name PRIVATE-from-LOCAL-v4 rule 1020 state invalid enable
 set firewall ipv6-name PRIVATE-from-LOCAL-v6 default-action reject
-set firewall ipv6-name PRIVATE-from-LOCAL-v6 rule 1010 action accept
-set firewall ipv6-name PRIVATE-from-LOCAL-v6 rule 1010 state established enable
-set firewall ipv6-name PRIVATE-from-LOCAL-v6 rule 1010 state related enable
-set firewall ipv6-name PRIVATE-from-LOCAL-v6 rule 1020 action drop
-set firewall ipv6-name PRIVATE-from-LOCAL-v6 rule 1020 state invalid enable
 set zone-policy zone PRIVATE from LOCAL firewall name PRIVATE-from-LOCAL-v4
 set zone-policy zone PRIVATE from LOCAL firewall ipv6-name PRIVATE-from-LOCAL-v6
 
@@ -52,47 +27,17 @@ set zone-policy zone PRIVATE from LOCAL firewall ipv6-name PRIVATE-from-LOCAL-v6
 set zone-policy zone PUBLIC description 'Public Zone'
 set zone-policy zone PUBLIC interface pppoe0
 set firewall name PUBLIC-from-PRIVATE-v4 default-action accept
-set firewall name PUBLIC-from-PRIVATE-v4 rule 1010 action accept
-set firewall name PUBLIC-from-PRIVATE-v4 rule 1010 state established enable
-set firewall name PUBLIC-from-PRIVATE-v4 rule 1010 state related enable
-set firewall name PUBLIC-from-PRIVATE-v4 rule 1020 action drop
-set firewall name PUBLIC-from-PRIVATE-v4 rule 1020 state invalid enable
 set firewall ipv6-name PUBLIC-from-PRIVATE-v6 default-action accept
-set firewall ipv6-name PUBLIC-from-PRIVATE-v6 rule 1010 action accept
-set firewall ipv6-name PUBLIC-from-PRIVATE-v6 rule 1010 state established enable
-set firewall ipv6-name PUBLIC-from-PRIVATE-v6 rule 1010 state related enable
-set firewall ipv6-name PUBLIC-from-PRIVATE-v6 rule 1020 action drop
-set firewall ipv6-name PUBLIC-from-PRIVATE-v6 rule 1020 state invalid enable
 set zone-policy zone PUBLIC from PRIVATE firewall name PUBLIC-from-PRIVATE-v4
 set zone-policy zone PUBLIC from PRIVATE firewall ipv6-name PUBLIC-from-PRIVATE-v6
 
 set firewall name PUBLIC-from-DMZ-v4 default-action accept
-set firewall name PUBLIC-from-DMZ-v4 rule 1010 action accept
-set firewall name PUBLIC-from-DMZ-v4 rule 1010 state established enable
-set firewall name PUBLIC-from-DMZ-v4 rule 1010 state related enable
-set firewall name PUBLIC-from-DMZ-v4 rule 1020 action drop
-set firewall name PUBLIC-from-DMZ-v4 rule 1020 state invalid enable
 set firewall ipv6-name PUBLIC-from-DMZ-v6 default-action accept
-set firewall ipv6-name PUBLIC-from-DMZ-v6 rule 1010 action accept
-set firewall ipv6-name PUBLIC-from-DMZ-v6 rule 1010 state established enable
-set firewall ipv6-name PUBLIC-from-DMZ-v6 rule 1010 state related enable
-set firewall ipv6-name PUBLIC-from-DMZ-v6 rule 1020 action drop
-set firewall ipv6-name PUBLIC-from-DMZ-v6 rule 1020 state invalid enable
 set zone-policy zone PUBLIC from DMZ firewall name PUBLIC-from-DMZ-v4
 set zone-policy zone PUBLIC from DMZ firewall ipv6-name PUBLIC-from-DMZ-v6
 
 set firewall name PUBLIC-from-LOCAL-v4 default-action accept
-set firewall name PUBLIC-from-LOCAL-v4 rule 1010 action accept
-set firewall name PUBLIC-from-LOCAL-v4 rule 1010 state established enable
-set firewall name PUBLIC-from-LOCAL-v4 rule 1010 state related enable
-set firewall name PUBLIC-from-LOCAL-v4 rule 1020 action drop
-set firewall name PUBLIC-from-LOCAL-v4 rule 1020 state invalid enable
 set firewall ipv6-name PUBLIC-from-LOCAL-v6 default-action accept
-set firewall ipv6-name PUBLIC-from-LOCAL-v6 rule 1010 action accept
-set firewall ipv6-name PUBLIC-from-LOCAL-v6 rule 1010 state established enable
-set firewall ipv6-name PUBLIC-from-LOCAL-v6 rule 1010 state related enable
-set firewall ipv6-name PUBLIC-from-LOCAL-v6 rule 1020 action drop
-set firewall ipv6-name PUBLIC-from-LOCAL-v6 rule 1020 state invalid enable
 set zone-policy zone PUBLIC from LOCAL firewall name PUBLIC-from-LOCAL-v4
 set zone-policy zone PUBLIC from LOCAL firewall ipv6-name PUBLIC-from-LOCAL-v6
 
@@ -101,47 +46,17 @@ set zone-policy zone PUBLIC from LOCAL firewall ipv6-name PUBLIC-from-LOCAL-v6
 set zone-policy zone DMZ description 'Dmz Zone'
 set zone-policy zone DMZ interface eth2
 set firewall name DMZ-from-PRIVATE-v4 default-action accept
-set firewall name DMZ-from-PRIVATE-v4 rule 1010 action accept
-set firewall name DMZ-from-PRIVATE-v4 rule 1010 state established enable
-set firewall name DMZ-from-PRIVATE-v4 rule 1010 state related enable
-set firewall name DMZ-from-PRIVATE-v4 rule 1020 action drop
-set firewall name DMZ-from-PRIVATE-v4 rule 1020 state invalid enable
 set firewall ipv6-name DMZ-from-PRIVATE-v6 default-action accept
-set firewall ipv6-name DMZ-from-PRIVATE-v6 rule 1010 action accept
-set firewall ipv6-name DMZ-from-PRIVATE-v6 rule 1010 state established enable
-set firewall ipv6-name DMZ-from-PRIVATE-v6 rule 1010 state related enable
-set firewall ipv6-name DMZ-from-PRIVATE-v6 rule 1020 action drop
-set firewall ipv6-name DMZ-from-PRIVATE-v6 rule 1020 state invalid enable
 set zone-policy zone DMZ from PRIVATE firewall name DMZ-from-PRIVATE-v4
 set zone-policy zone DMZ from PRIVATE firewall ipv6-name DMZ-from-PRIVATE-v6
 
 set firewall name DMZ-from-PUBLIC-v4 default-action reject
-set firewall name DMZ-from-PUBLIC-v4 rule 1010 action accept
-set firewall name DMZ-from-PUBLIC-v4 rule 1010 state established enable
-set firewall name DMZ-from-PUBLIC-v4 rule 1010 state related enable
-set firewall name DMZ-from-PUBLIC-v4 rule 1020 action drop
-set firewall name DMZ-from-PUBLIC-v4 rule 1020 state invalid enable
 set firewall ipv6-name DMZ-from-PUBLIC-v6 default-action reject
-set firewall ipv6-name DMZ-from-PUBLIC-v6 rule 1010 action accept
-set firewall ipv6-name DMZ-from-PUBLIC-v6 rule 1010 state established enable
-set firewall ipv6-name DMZ-from-PUBLIC-v6 rule 1010 state related enable
-set firewall ipv6-name DMZ-from-PUBLIC-v6 rule 1020 action drop
-set firewall ipv6-name DMZ-from-PUBLIC-v6 rule 1020 state invalid enable
 set zone-policy zone DMZ from PUBLIC firewall name DMZ-from-PUBLIC-v4
 set zone-policy zone DMZ from PUBLIC firewall ipv6-name DMZ-from-PUBLIC-v6
 
 set firewall name DMZ-from-LOCAL-v4 default-action reject
-set firewall name DMZ-from-LOCAL-v4 rule 1010 action accept
-set firewall name DMZ-from-LOCAL-v4 rule 1010 state established enable
-set firewall name DMZ-from-LOCAL-v4 rule 1010 state related enable
-set firewall name DMZ-from-LOCAL-v4 rule 1020 action drop
-set firewall name DMZ-from-LOCAL-v4 rule 1020 state invalid enable
 set firewall ipv6-name DMZ-from-LOCAL-v6 default-action reject
-set firewall ipv6-name DMZ-from-LOCAL-v6 rule 1010 action accept
-set firewall ipv6-name DMZ-from-LOCAL-v6 rule 1010 state established enable
-set firewall ipv6-name DMZ-from-LOCAL-v6 rule 1010 state related enable
-set firewall ipv6-name DMZ-from-LOCAL-v6 rule 1020 action drop
-set firewall ipv6-name DMZ-from-LOCAL-v6 rule 1020 state invalid enable
 set zone-policy zone DMZ from LOCAL firewall name DMZ-from-LOCAL-v4
 set zone-policy zone DMZ from LOCAL firewall ipv6-name DMZ-from-LOCAL-v6
 
@@ -150,46 +65,18 @@ set zone-policy zone DMZ from LOCAL firewall ipv6-name DMZ-from-LOCAL-v6
 set zone-policy zone LOCAL description 'Local Zone'
 set zone-policy zone LOCAL local-zone
 set firewall name LOCAL-from-PRIVATE-v4 default-action accept
-set firewall name LOCAL-from-PRIVATE-v4 rule 1010 action accept
-set firewall name LOCAL-from-PRIVATE-v4 rule 1010 state established enable
-set firewall name LOCAL-from-PRIVATE-v4 rule 1010 state related enable
-set firewall name LOCAL-from-PRIVATE-v4 rule 1020 action drop
-set firewall name LOCAL-from-PRIVATE-v4 rule 1020 state invalid enable
 set firewall ipv6-name LOCAL-from-PRIVATE-v6 default-action accept
-set firewall ipv6-name LOCAL-from-PRIVATE-v6 rule 1010 action accept
-set firewall ipv6-name LOCAL-from-PRIVATE-v6 rule 1010 state established enable
-set firewall ipv6-name LOCAL-from-PRIVATE-v6 rule 1010 state related enable
-set firewall ipv6-name LOCAL-from-PRIVATE-v6 rule 1020 action drop
-set firewall ipv6-name LOCAL-from-PRIVATE-v6 rule 1020 state invalid enable
 set zone-policy zone LOCAL from PRIVATE firewall name LOCAL-from-PRIVATE-v4
 set zone-policy zone LOCAL from PRIVATE firewall ipv6-name LOCAL-from-PRIVATE-v6
 
 set firewall name LOCAL-from-PUBLIC-v4 default-action reject
-set firewall name LOCAL-from-PUBLIC-v4 rule 1010 action accept
-set firewall name LOCAL-from-PUBLIC-v4 rule 1010 state established enable
-set firewall name LOCAL-from-PUBLIC-v4 rule 1010 state related enable
-set firewall name LOCAL-from-PUBLIC-v4 rule 1020 action drop
-set firewall name LOCAL-from-PUBLIC-v4 rule 1020 state invalid enable
 set firewall ipv6-name LOCAL-from-PUBLIC-v6 default-action reject
-set firewall ipv6-name LOCAL-from-PUBLIC-v6 rule 1010 action accept
-set firewall ipv6-name LOCAL-from-PUBLIC-v6 rule 1010 state established enable
-set firewall ipv6-name LOCAL-from-PUBLIC-v6 rule 1010 state related enable
-set firewall ipv6-name LOCAL-from-PUBLIC-v6 rule 1020 action drop
-set firewall ipv6-name LOCAL-from-PUBLIC-v6 rule 1020 state invalid enable
 set zone-policy zone LOCAL from PUBLIC firewall name LOCAL-from-PUBLIC-v4
 set zone-policy zone LOCAL from PUBLIC firewall ipv6-name LOCAL-from-PUBLIC-v6
 
 set firewall name LOCAL-from-DMZ-v4 default-action reject
-set firewall name LOCAL-from-DMZ-v4 rule 1010 action accept
-set firewall name LOCAL-from-DMZ-v4 rule 1010 state established enable
-set firewall name LOCAL-from-DMZ-v4 rule 1010 state related enable
-set firewall name LOCAL-from-DMZ-v4 rule 1020 action drop
-set firewall name LOCAL-from-DMZ-v4 rule 1020 state invalid enable
 set firewall ipv6-name LOCAL-from-DMZ-v6 default-action reject
-set firewall ipv6-name LOCAL-from-DMZ-v6 rule 1010 action accept
-set firewall ipv6-name LOCAL-from-DMZ-v6 rule 1010 state established enable
-set firewall ipv6-name LOCAL-from-DMZ-v6 rule 1010 state related enable
-set firewall ipv6-name LOCAL-from-DMZ-v6 rule 1020 action drop
-set firewall ipv6-name LOCAL-from-DMZ-v6 rule 1020 state invalid enable
 set zone-policy zone LOCAL from DMZ firewall name LOCAL-from-DMZ-v4
 set zone-policy zone LOCAL from DMZ firewall ipv6-name LOCAL-from-DMZ-v6
+
+
