@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    json (2.3.0)
+    titleize (1.4.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  json
+  titleize
+
+BUNDLED WITH
+   2.0.2
