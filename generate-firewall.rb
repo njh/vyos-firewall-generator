@@ -1,28 +1,10 @@
 #!/usr/bin/env ruby
 
+require 'json'
 require 'titleize'
 
-zones = {
-  'PRIVATE' => ['eth0', 'eth1'],
-  'PUBLIC' => ['pppoe0'],
-  'DMZ' => ['eth2'],
-  'LOCAL' => []
-}
 
-default_actions = {
-   'PRIVATE-from-PUBLIC' => 'reject',
-   'PRIVATE-from-DMZ' => 'accept',
-   'PRIVATE-from-LOCAL' => 'reject',
-   'PUBLIC-from-PRIVATE' => 'accept',
-   'PUBLIC-from-DMZ' => 'accept',
-   'PUBLIC-from-LOCAL' => 'accept',
-   'DMZ-from-PRIVATE' => 'accept',
-   'DMZ-from-PUBLIC' => 'reject',
-   'DMZ-from-LOCAL' => 'reject',
-   'LOCAL-from-PRIVATE' => 'accept',
-   'LOCAL-from-PUBLIC' => 'reject',
-   'LOCAL-from-DMZ' => 'reject',
-}
+json = JSON.parse(File.read('firewall-example.json'))
 
 
 
@@ -39,26 +21,26 @@ puts "set firewall state-policy related action accept"
 puts "set firewall state-policy invalid action drop"
 puts
 
-
-zones.each_pair do  |zone, interfaces|
-  puts "# Zone #{zone}"
-  puts "set zone-policy zone #{zone} description '#{zone.titleize} Zone'"
-  if interfaces.empty?
-    puts "set zone-policy zone #{zone} local-zone"
+json['zones'].each_pair do  |zone_name, zone_config|
+  puts "# Zone #{zone_name}"
+  description = zone_config['description'] || "#{zone_name.titleize} Zone"
+  puts "set zone-policy zone #{zone_name} description '#{description}'"
+  if zone_config['interfaces'].nil? || zone_config['interfaces'].empty?
+    puts "set zone-policy zone #{zone_name} local-zone"
   else
-    interfaces.each do |interface|
-      puts "set zone-policy zone #{zone} interface #{interface}"
+    zone_config['interfaces'].each do |interface|
+      puts "set zone-policy zone #{zone_name} interface #{interface}"
     end
   end
 
-  zones.keys.each do |from_zone|
-    next if zone == from_zone
-    key = "#{zone}-from-#{from_zone}"
+  json['zones'].keys.each do |from_zone|
+    next if zone_name == from_zone
+    key = "#{zone_name}-from-#{from_zone}"
     
-    puts_filewall_rules("#{key}-v4", 'ipv4', default_actions[key])
-    puts_filewall_rules("#{key}-v6", 'ipv6', default_actions[key])
-    puts "set zone-policy zone #{zone} from #{from_zone} firewall name #{key}-v4"
-    puts "set zone-policy zone #{zone} from #{from_zone} firewall ipv6-name #{key}-v6"
+    puts_filewall_rules("#{key}-v4", 'ipv4', json['default-actions'][key])
+    puts_filewall_rules("#{key}-v6", 'ipv6', json['default-actions'][key])
+    puts "set zone-policy zone #{zone_name} from #{from_zone} firewall name #{key}-v4"
+    puts "set zone-policy zone #{zone_name} from #{from_zone} firewall ipv6-name #{key}-v6"
     puts
   end
 
