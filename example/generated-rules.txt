@@ -6,7 +6,6 @@ set firewall state-policy invalid action drop
 # Zone PRIVATE
 set zone-policy zone PRIVATE description 'The local private LAN'
 set zone-policy zone PRIVATE interface eth0
-set zone-policy zone PRIVATE interface eth1
 set firewall name PRIVATE-from-PUBLIC-v4 default-action reject
 set firewall ipv6-name PRIVATE-from-PUBLIC-v6 default-action reject
 set zone-policy zone PRIVATE from PUBLIC firewall name PRIVATE-from-PUBLIC-v4
@@ -25,7 +24,7 @@ set zone-policy zone PRIVATE from LOCAL firewall ipv6-name PRIVATE-from-LOCAL-v6
 
 # Zone PUBLIC
 set zone-policy zone PUBLIC description 'The Internet'
-set zone-policy zone PUBLIC interface pppoe0
+set zone-policy zone PUBLIC interface eth1
 set firewall name PUBLIC-from-PRIVATE-v4 default-action accept
 set firewall ipv6-name PUBLIC-from-PRIVATE-v6 default-action accept
 set zone-policy zone PUBLIC from PRIVATE firewall name PUBLIC-from-PRIVATE-v4

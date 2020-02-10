@@ -4,7 +4,7 @@ require 'json'
 require 'titleize'
 
 
-json = JSON.parse(File.read('firewall-example.json'))
+config = JSON.parse(File.read('example/firewall.json'))
 
 
 

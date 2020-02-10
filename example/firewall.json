@@ -2,11 +2,11 @@
   "zones": {
     "PRIVATE": {
       "description": "The local private LAN",
-      "interfaces": ["eth0", "eth1"]
+      "interfaces": ["eth0"]
     },
     "PUBLIC": {
       "description": "The Internet",
-      "interfaces": ["pppoe0"]
+      "interfaces": ["eth1"]
     },
     "DMZ": {
       "description": "Screened subnet for internet facing servers",
