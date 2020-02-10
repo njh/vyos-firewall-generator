@@ -21,7 +21,7 @@ puts "set firewall state-policy related action accept"
 puts "set firewall state-policy invalid action drop"
 puts
 
-json['zones'].each_pair do  |zone_name, zone_config|
+config['zones'].each_pair do  |zone_name, zone_config|
   puts "# Zone #{zone_name}"
   description = zone_config['description'] || "#{zone_name.titleize} Zone"
   puts "set zone-policy zone #{zone_name} description '#{description}'"
@@ -33,12 +33,12 @@ json['zones'].each_pair do  |zone_name, zone_config|
     end
   end
 
-  json['zones'].keys.each do |from_zone|
+  config['zones'].keys.each do |from_zone|
     next if zone_name == from_zone
     key = "#{zone_name}-from-#{from_zone}"
     
-    puts_filewall_rules("#{key}-v4", 'ipv4', json['default-actions'][key])
-    puts_filewall_rules("#{key}-v6", 'ipv6', json['default-actions'][key])
+    puts_default_action("#{key}-v4", 'ipv4', config['default-actions'][key])
+    puts_default_action("#{key}-v6", 'ipv6', config['default-actions'][key])
     puts "set zone-policy zone #{zone_name} from #{from_zone} firewall name #{key}-v4"
     puts "set zone-policy zone #{zone_name} from #{from_zone} firewall ipv6-name #{key}-v6"
     puts
