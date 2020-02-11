@@ -1,0 +1,16 @@
+{
+  "zones": {
+    "PRIVATE": {
+      "description": "The local private LAN",
+      "interfaces": ["eth1"]
+    },
+    "PUBLIC": {
+      "description": "The Internet",
+      "interfaces": ["eth0"]
+    }
+  },
+  "default-actions": {
+    "PRIVATE-from-PUBLIC": "reject",
+    "PUBLIC-from-PRIVATE": "accept"
+  }
+}
