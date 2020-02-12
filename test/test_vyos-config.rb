@@ -2,7 +2,7 @@ require "minitest/autorun"
 require "vyos-config"
 
 # Test suite for testing generating VyOS configuration
-# 
+#
 # See also: https://github.com/vyos/vyos-1x/blob/current/tests/data/config.valid
 #
 
@@ -17,8 +17,13 @@ class TestVyosConfig < Minitest::Test
   end
 
   def test_config_empty_node
-    @config.empty_node
+    @config.empty_node.empty
     assert_equal "empty-node {\n}\n", @config.to_s
+  end
+
+  def test_config_top_level_valueless_node
+    @config.top_level_valueless_node
+    assert_equal "top-level-valueless-node\n", @config.to_s
   end
 
   def test_config_integer
@@ -90,6 +95,37 @@ class TestVyosConfig < Minitest::Test
       "ssh {\n" +
       "    port 22\n" +
       "}\n", @config.service.to_s
+    )
+  end
+
+
+  def test_commands_top_level_leaf_node
+    @config.top_level_leaf_node = 'foo'
+    assert_equal(
+      [
+        "set top-level-leaf-node foo"
+      ],
+      @config.commands
+    )
+  end
+
+  def test_commands_empty_node
+    @config.empty_node.empty
+    assert_equal(
+      [
+        "set empty-node"
+      ],
+      @config.commands
+    )
+  end
+
+  def test_commands_top_level_valueless_node
+    @config.top_level_valueless_node
+    assert_equal(
+      [
+        "set top-level-valueless-node"
+      ],
+      @config.commands
     )
   end
 

@@ -20,6 +20,6 @@ class VyOSConfig::Defaults < VyOSConfig
     self.system.ntp.server = '2.vyos.pool.ntp.org'
     self.system.console.device('ttyS0').speed = '115200'
     self.system.config_management.commit_revisions = 100
-    interfaces.loopback('lo')
+    interfaces.loopback('lo').empty
   end
 end
