@@ -92,4 +92,40 @@ class TestVyosConfig < Minitest::Test
       "}\n", @config.service.to_s
     )
   end
+
+  def test_commands_simple
+    @config.service.ssh.port = 22
+    assert_equal(
+      [
+        "set service ssh port port 22"
+      ],
+      @config.commands
+    )
+  end
+
+  def test_commands_multi
+    @config.system.config_management.commit_revisions = 100
+    @config.system.login.user('vyos').authentication.plaintext_password = ''
+    @config.service.ssh.port = 22
+    assert_equal(
+      [
+        "set system config-management commit-revisions commit-revisions 100",
+        "set system login user vyos authentication plaintext-password plaintext-password ''",
+        "set service ssh port port 22"
+      ],
+      @config.commands
+    )
+  end
+
+  def test_commands_multiple_same_name
+    @config.interfaces.ethernet('eth0').address = '192.0.2.1/24'
+    @config.interfaces.ethernet('eth0').address = '2001:db8::ffff/64'
+    assert_equal(
+      [
+        "set interfaces ethernet eth0 address address '192.0.2.1/24'",
+        "set interfaces ethernet eth0 address address '2001:db8::ffff/64'",
+      ],
+      @config.commands
+    )
+  end
 end

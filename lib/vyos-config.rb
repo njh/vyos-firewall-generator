@@ -18,7 +18,8 @@ class VyOSConfig
   end
 
   def method_missing(m, *args)
-    # Hyphens are not allowed in method names, but VyOS uses them (and not underscores)
+    # Hyphens are not allowed in method names
+    # but VyOS uses them (and not underscores)
     name = m.to_s.gsub('_', '-')
     if name.match(/^(.+)=$/)
       self[$1] = args.first
@@ -52,6 +53,22 @@ class VyOSConfig
       elsif value.is_a?(Array)
         escape_values(value).each do |v|
           result += indent + "#{key} #{v}\n"
+        end
+      end
+    end
+    result
+  end
+
+  # Create VyOS configuration commands
+  def commands(path=[])
+    result = []
+    @properties.each_pair do |key, value|
+      subpath = path.dup << key
+      if value.is_a?(VyOSConfig)
+        result += value.commands(subpath)
+      elsif value.is_a?(Array)
+        result += escape_values(value).map do |v|
+          (['set'] + subpath + [key, v]).join(' ')
         end
       end
     end
