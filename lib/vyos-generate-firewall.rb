@@ -32,9 +32,9 @@ class VyOSFirewallGenerator
   end
 
   def generate_global_stateful
-  	config.firewall.state_policy.established.action = :accept
-  	config.firewall.state_policy.related.action = :accept
-  	config.firewall.state_policy.invalid.action = :drop
+    config.firewall.state_policy.established.action = :accept
+    config.firewall.state_policy.related.action = :accept
+    config.firewall.state_policy.invalid.action = :drop
   end
 
   def generate
@@ -65,7 +65,7 @@ class VyOSFirewallGenerator
     generate
     config.commands
   end
-  
+
   def to_s
     generate
     config.to_s
