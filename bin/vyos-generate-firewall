@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
+
+require 'json'
+require 'vyos-generate-firewall'
+
+if ARGV.count != 1
+  $stderr.puts "Usage: vyos-generate-firewall <filename.json>"
+  exit(-1)
+end
+
+
+input = JSON.parse(File.read(ARGV[0]))
+
+generator = VyOSFirewallGenerator.new(input)
+puts generator.to_s
