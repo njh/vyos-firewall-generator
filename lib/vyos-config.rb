@@ -68,7 +68,7 @@ class VyOSConfig
         result += value.commands(subpath)
       elsif value.is_a?(Array)
         result += escape_values(value).map do |v|
-          (['set'] + subpath + [key, v]).join(' ')
+          (['set'] + subpath + [v]).join(' ')
         end
       end
     end
