@@ -39,7 +39,7 @@ class VyOSFirewallGenerator
 
   def generate
     zones.each_pair do |zone_name, zone_data|
-      description = zone_data['description'] || "#{zone_name.titleize} Zone"
+      description = zone_data['description'] || "#{zone_name.to_s.titleize} Zone"
       config.zone_policy.zone(zone_name).description = description
       if zone_data['interfaces'].nil? || zone_data['interfaces'].empty?
         config.zone_policy.zone(zone_name).local_zone
