@@ -1,4 +1,4 @@
-require "minitest/autorun"
+require "test_helper"
 require "vyos-config/defaults"
 
 class TestVyosConfigDefaults < Minitest::Test

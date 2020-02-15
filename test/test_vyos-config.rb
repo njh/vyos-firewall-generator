@@ -1,4 +1,4 @@
-require "minitest/autorun"
+require "test_helper"
 require "vyos-config"
 
 # Test suite for testing generating VyOS configuration
