@@ -1,0 +1,36 @@
+zone-policy {
+    zone PUBLIC {
+        description 'The Internet'
+        interface eth0
+        from PRIVATE {
+            firewall {
+                name PUBLIC-from-PRIVATE-v4
+                ipv6-name PUBLIC-from-PRIVATE-v6
+            }
+        }
+    }
+    zone PRIVATE {
+        description 'The local private LAN'
+        interface eth1
+        from PUBLIC {
+            firewall {
+                name PRIVATE-from-PUBLIC-v4
+                ipv6-name PRIVATE-from-PUBLIC-v6
+            }
+        }
+    }
+}
+firewall {
+    name PUBLIC-from-PRIVATE-v4 {
+        default-action accept
+    }
+    ipv6-name PUBLIC-from-PRIVATE-v6 {
+        default-action accept
+    }
+    name PRIVATE-from-PUBLIC-v4 {
+        default-action reject
+    }
+    ipv6-name PRIVATE-from-PUBLIC-v6 {
+        default-action reject
+    }
+}

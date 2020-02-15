@@ -66,6 +66,10 @@ class VyOSFirewallGenerator
     config.commands
   end
 
+  def commands_string
+    commands.join("\n")+"\n"
+  end
+
   def to_s
     generate
     config.to_s
