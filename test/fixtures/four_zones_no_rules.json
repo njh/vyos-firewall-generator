@@ -1,0 +1,33 @@
+{
+  "zones": {
+    "PUBLIC": {
+      "description": "The Internet",
+      "interfaces": ["eth0"]
+    },
+    "PRIVATE": {
+      "description": "The local private LAN",
+      "interfaces": ["eth1"]
+    },
+    "DMZ": {
+      "description": "Screened subnet for internet facing servers",
+      "interfaces": ["eth2"]
+    },
+    "LOCAL": {
+      "description": "The firewall itelf"
+    }
+  },
+  "default-actions": {
+    "PUBLIC-from-PRIVATE": "accept",
+    "PUBLIC-from-DMZ": "accept",
+    "PUBLIC-from-LOCAL": "accept",
+    "PRIVATE-from-PUBLIC": "reject",
+    "PRIVATE-from-DMZ": "reject",
+    "PRIVATE-from-LOCAL": "accept",
+    "DMZ-from-PUBLIC": "reject",
+    "DMZ-from-PRIVATE": "accept",
+    "DMZ-from-LOCAL": "accept",
+    "LOCAL-from-PUBLIC": "reject",
+    "LOCAL-from-PRIVATE": "accept",
+    "LOCAL-from-DMZ": "accept"
+  }
+}

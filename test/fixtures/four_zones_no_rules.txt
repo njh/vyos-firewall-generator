@@ -1,0 +1,164 @@
+zone-policy {
+    zone PUBLIC {
+        description 'The Internet'
+        interface eth0
+        from PRIVATE {
+            firewall {
+                name PUBLIC-from-PRIVATE-v4
+                ipv6-name PUBLIC-from-PRIVATE-v6
+            }
+        }
+        from DMZ {
+            firewall {
+                name PUBLIC-from-DMZ-v4
+                ipv6-name PUBLIC-from-DMZ-v6
+            }
+        }
+        from LOCAL {
+            firewall {
+                name PUBLIC-from-LOCAL-v4
+                ipv6-name PUBLIC-from-LOCAL-v6
+            }
+        }
+    }
+    zone PRIVATE {
+        description 'The local private LAN'
+        interface eth1
+        from PUBLIC {
+            firewall {
+                name PRIVATE-from-PUBLIC-v4
+                ipv6-name PRIVATE-from-PUBLIC-v6
+            }
+        }
+        from DMZ {
+            firewall {
+                name PRIVATE-from-DMZ-v4
+                ipv6-name PRIVATE-from-DMZ-v6
+            }
+        }
+        from LOCAL {
+            firewall {
+                name PRIVATE-from-LOCAL-v4
+                ipv6-name PRIVATE-from-LOCAL-v6
+            }
+        }
+    }
+    zone DMZ {
+        description 'Screened subnet for internet facing servers'
+        interface eth2
+        from PUBLIC {
+            firewall {
+                name DMZ-from-PUBLIC-v4
+                ipv6-name DMZ-from-PUBLIC-v6
+            }
+        }
+        from PRIVATE {
+            firewall {
+                name DMZ-from-PRIVATE-v4
+                ipv6-name DMZ-from-PRIVATE-v6
+            }
+        }
+        from LOCAL {
+            firewall {
+                name DMZ-from-LOCAL-v4
+                ipv6-name DMZ-from-LOCAL-v6
+            }
+        }
+    }
+    zone LOCAL {
+        description 'The firewall itelf'
+        local-zone
+        from PUBLIC {
+            firewall {
+                name LOCAL-from-PUBLIC-v4
+                ipv6-name LOCAL-from-PUBLIC-v6
+            }
+        }
+        from PRIVATE {
+            firewall {
+                name LOCAL-from-PRIVATE-v4
+                ipv6-name LOCAL-from-PRIVATE-v6
+            }
+        }
+        from DMZ {
+            firewall {
+                name LOCAL-from-DMZ-v4
+                ipv6-name LOCAL-from-DMZ-v6
+            }
+        }
+    }
+}
+firewall {
+    name PUBLIC-from-PRIVATE-v4 {
+        default-action accept
+    }
+    ipv6-name PUBLIC-from-PRIVATE-v6 {
+        default-action accept
+    }
+    name PUBLIC-from-DMZ-v4 {
+        default-action accept
+    }
+    ipv6-name PUBLIC-from-DMZ-v6 {
+        default-action accept
+    }
+    name PUBLIC-from-LOCAL-v4 {
+        default-action accept
+    }
+    ipv6-name PUBLIC-from-LOCAL-v6 {
+        default-action accept
+    }
+    name PRIVATE-from-PUBLIC-v4 {
+        default-action reject
+    }
+    ipv6-name PRIVATE-from-PUBLIC-v6 {
+        default-action reject
+    }
+    name PRIVATE-from-DMZ-v4 {
+        default-action reject
+    }
+    ipv6-name PRIVATE-from-DMZ-v6 {
+        default-action reject
+    }
+    name PRIVATE-from-LOCAL-v4 {
+        default-action accept
+    }
+    ipv6-name PRIVATE-from-LOCAL-v6 {
+        default-action accept
+    }
+    name DMZ-from-PUBLIC-v4 {
+        default-action reject
+    }
+    ipv6-name DMZ-from-PUBLIC-v6 {
+        default-action reject
+    }
+    name DMZ-from-PRIVATE-v4 {
+        default-action accept
+    }
+    ipv6-name DMZ-from-PRIVATE-v6 {
+        default-action accept
+    }
+    name DMZ-from-LOCAL-v4 {
+        default-action accept
+    }
+    ipv6-name DMZ-from-LOCAL-v6 {
+        default-action accept
+    }
+    name LOCAL-from-PUBLIC-v4 {
+        default-action reject
+    }
+    ipv6-name LOCAL-from-PUBLIC-v6 {
+        default-action reject
+    }
+    name LOCAL-from-PRIVATE-v4 {
+        default-action accept
+    }
+    ipv6-name LOCAL-from-PRIVATE-v6 {
+        default-action accept
+    }
+    name LOCAL-from-DMZ-v4 {
+        default-action accept
+    }
+    ipv6-name LOCAL-from-DMZ-v6 {
+        default-action accept
+    }
+}

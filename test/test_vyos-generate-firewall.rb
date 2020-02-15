@@ -13,4 +13,16 @@ class TestVyOSFirewallGenerator < Minitest::Test
     generator = VyOSFirewallGenerator.new(input)
     assert_equal fixture('simple_no_rules-commands.txt'), generator.commands_string
   end
+
+  def test_generate_four_zones_no_rules_config
+    input = json_fixture('four_zones_no_rules.json')
+    generator = VyOSFirewallGenerator.new(input)
+    assert_equal fixture('four_zones_no_rules.txt'), generator.to_s
+  end
+
+  def test_generate_four_zones_no_rules_commands
+    input = json_fixture('four_zones_no_rules.json')
+    generator = VyOSFirewallGenerator.new(input)
+    assert_equal fixture('four_zones_no_rules-commands.txt'), generator.commands_string
+  end
 end
