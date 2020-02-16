@@ -5,7 +5,7 @@ class VyOSFirewallGenerator
   attr_accessor :input
   attr_accessor :config
 
-  def initialize(input)
+  def initialize(input=nil)
     @config = VyOSConfig.new
     @input = input
   end
