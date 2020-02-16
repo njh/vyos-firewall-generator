@@ -22,6 +22,16 @@ class VyOSFirewallGenerator
     zones.keys
   end
 
+  def detect_ipvers(address)
+    if address.match(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/)
+      :ipv4
+    elsif address.match(/\h{0,4}::?\h{1,4}/i)
+      :ipv6
+    else
+      nil
+    end
+  end
+
   def generate_default_action(name, ipvers, default_action)
     raise "default_action is not set for #{name}" if default_action.nil?
     if ipvers == :ipv6
