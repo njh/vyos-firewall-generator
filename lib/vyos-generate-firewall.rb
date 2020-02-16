@@ -34,11 +34,9 @@ class VyOSFirewallGenerator
 
   def generate_default_action(name, ipvers, default_action)
     raise "default_action is not set for #{name}" if default_action.nil?
-    if ipvers == :ipv6
-      config.firewall.ipv6_name(name).default_action = default_action
-    else
-      config.firewall.name(name).default_action = default_action
-    end
+    name_dec = (ipvers == :ipv6 ? 'ipv6-name' : 'name')
+
+    config.firewall.send(name_dec, name).default_action = default_action
   end
 
   def generate_global_stateful
