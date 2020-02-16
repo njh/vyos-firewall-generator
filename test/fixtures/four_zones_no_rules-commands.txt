@@ -54,3 +54,6 @@ set firewall name LOCAL-from-PRIVATE-v4 default-action accept
 set firewall ipv6-name LOCAL-from-PRIVATE-v6 default-action accept
 set firewall name LOCAL-from-DMZ-v4 default-action accept
 set firewall ipv6-name LOCAL-from-DMZ-v6 default-action accept
+set firewall state-policy established action accept
+set firewall state-policy related action accept
+set firewall state-policy invalid action drop

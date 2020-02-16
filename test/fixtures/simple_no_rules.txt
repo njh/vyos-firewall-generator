@@ -33,4 +33,15 @@ firewall {
     ipv6-name PRIVATE-from-PUBLIC-v6 {
         default-action reject
     }
+    state-policy {
+        established {
+            action accept
+        }
+        related {
+            action accept
+        }
+        invalid {
+            action drop
+        }
+    }
 }

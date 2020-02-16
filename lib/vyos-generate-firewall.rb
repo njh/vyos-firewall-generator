@@ -67,6 +67,8 @@ class VyOSFirewallGenerator
         config.zone_policy.zone(zone_name).from(from_zone).firewall.ipv6_name = "#{key}-v6"
       end
     end
+
+    generate_global_stateful
   end
 
   def commands

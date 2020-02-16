@@ -161,4 +161,15 @@ firewall {
     ipv6-name LOCAL-from-DMZ-v6 {
         default-action accept
     }
+    state-policy {
+        established {
+            action accept
+        }
+        related {
+            action accept
+        }
+        invalid {
+            action drop
+        }
+    }
 }

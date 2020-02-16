@@ -44,6 +44,11 @@ class TestVyOSFirewallGenerator < Minitest::Test
   def test_detect_ipvers_plain_hostname
     assert_nil @generator.detect_ipvers('foobar')
   end
+  
+  def test_generate_global_stateful
+    @generator.generate_global_stateful
+    assert_equal fixture('global_stateful.txt'), @generator.config.to_s
+  end
 
   def test_generate_simple_no_rules_config
     @generator.input = json_fixture('simple_no_rules.json')

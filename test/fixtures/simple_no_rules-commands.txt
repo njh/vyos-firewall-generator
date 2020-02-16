@@ -10,3 +10,6 @@ set firewall name PUBLIC-from-PRIVATE-v4 default-action accept
 set firewall ipv6-name PUBLIC-from-PRIVATE-v6 default-action accept
 set firewall name PRIVATE-from-PUBLIC-v4 default-action reject
 set firewall ipv6-name PRIVATE-from-PUBLIC-v6 default-action reject
+set firewall state-policy established action accept
+set firewall state-policy related action accept
+set firewall state-policy invalid action drop
