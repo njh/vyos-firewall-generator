@@ -22,14 +22,39 @@ class VyOSFirewallGenerator
     zones.keys
   end
 
+  # Detect if an address is IPv4 or IPv6
   def detect_ipvers(address)
-    if address.match(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/)
+    if address =~ /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/
       :ipv4
-    elsif address.match(/\h{0,4}::?\h{1,4}/i)
+    elsif address =~ /\h{0,4}::?\h{1,4}/i
       :ipv6
     else
       nil
     end
+  end
+
+  # Return an array of addresses that match either IPv4 or IPv6
+  def select_ipvers(addresses, ipvers)
+    addresses = [addresses] unless addresses.is_a?(Array)
+    addresses.select {|addr| detect_ipvers(addr) == ipvers}
+  end
+
+  # Return an array of addresses from 1 or more aliases that match either IPv4 or IPv6
+  def resolve_alias(addresses, ipvers)
+    addresses = [addresses] unless addresses.is_a?(Array)
+    result = []
+    addresses.each do |address|
+      if address =~ /^([\w\-]+)$/
+        if aliases[address]
+          result += select_ipvers(aliases[address], ipvers)
+        else
+          raise "Alias is not defined: #{address}"
+        end
+      else
+        result += select_ipvers(address, ipvers)
+      end
+    end
+    result
   end
 
   def generate_default_action(name, ipvers, default_action)

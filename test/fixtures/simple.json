@@ -1,0 +1,29 @@
+{
+  "zones": {
+    "PUBLIC": {
+      "description": "The Internet",
+      "interfaces": ["eth0"]
+    },
+    "PRIVATE": {
+      "description": "The local private LAN",
+      "interfaces": ["eth1"]
+    }
+  },
+  "default-actions": {
+    "PUBLIC-from-PRIVATE": "accept",
+    "PRIVATE-from-PUBLIC": "reject"
+  },
+  "aliases": {
+    "server1": [
+      "203.0.113.40",
+      "2001:0DB8:DEAD::40"
+    ],
+    "server2": [
+      "203.0.113.45",
+      "203.0.113.46"
+    ],
+    "server3": [
+      "2001:0DB8:DEAD::60"
+    ]
+  }
+}

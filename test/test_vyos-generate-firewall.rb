@@ -44,7 +44,82 @@ class TestVyOSFirewallGenerator < Minitest::Test
   def test_detect_ipvers_plain_hostname
     assert_nil @generator.detect_ipvers('foobar')
   end
-  
+
+  def test_select_ipvers_ipv4
+    assert_equal ['127.0.0.1'], @generator.select_ipvers(['127.0.0.1', '::1'], :ipv4)
+  end
+
+  def test_select_ipvers_ipv6
+    assert_equal ['::1'], @generator.select_ipvers(['127.0.0.1', '::1'], :ipv6)
+  end
+
+  def test_select_ipvers_invalid
+    assert_equal [], @generator.select_ipvers(['foobar', '1.2'], :ipv6)
+  end
+
+  def test_resolve_alias_ipv4
+    @generator.input = json_fixture('simple.json')
+    assert_equal ['203.0.113.40'], @generator.resolve_alias('server1', :ipv4)
+  end
+
+  def test_resolve_alias_ipv6
+    @generator.input = json_fixture('simple.json')
+    assert_equal ['2001:0DB8:DEAD::40'], @generator.resolve_alias('server1', :ipv6)
+  end
+
+  def test_resolve_alias_ipv4_only
+    @generator.input = json_fixture('simple.json')
+    assert_equal(
+      ['203.0.113.45', '203.0.113.46'],
+      @generator.resolve_alias('server2', :ipv4)
+    )
+  end
+
+  def test_resolve_alias_ipv6_only
+    @generator.input = json_fixture('simple.json')
+    assert_equal(
+      ['2001:0DB8:DEAD::60'],
+      @generator.resolve_alias('server3', :ipv6)
+    )
+  end
+
+  def test_resolve_multiple_alias_ipv4
+    @generator.input = json_fixture('simple.json')
+    assert_equal(
+      ["203.0.113.40", "203.0.113.45", "203.0.113.46"],
+      @generator.resolve_alias(['server1', 'server2', 'server3'], :ipv4)
+    )
+  end
+
+  def test_resolve_multiple_alias_ipv6
+    @generator.input = json_fixture('simple.json')
+    assert_equal(
+      ["2001:0DB8:DEAD::40", "2001:0DB8:DEAD::60"],
+      @generator.resolve_alias(['server1', 'server2', 'server3'], :ipv6)
+    )
+  end
+
+  def test_resolve_address_not_alias_ipv4
+    @generator.input = json_fixture('simple.json')
+    assert_equal(
+      ["127.0.0.1"],
+      @generator.resolve_alias('127.0.0.1', :ipv4)
+    )
+  end
+
+  def test_resolve_address_not_alias_ipv6
+    @generator.input = json_fixture('simple.json')
+    assert_equal(
+      ["2001:0DB8:DEAD::1"],
+      @generator.resolve_alias(['127.0.0.1', '2001:0DB8:DEAD::1'], :ipv6)
+    )
+  end
+
+  def test_resolve_unknown_alias
+    @generator.input = json_fixture('simple.json')
+    assert_raises {@generator.resolve_alias('uknown-alias', :ipv4)}
+  end
+
   def test_generate_global_stateful
     @generator.generate_global_stateful
     assert_equal fixture('global_stateful.txt'), @generator.config.to_s
