@@ -74,6 +74,18 @@ class TestVyosConfig < Minitest::Test
     )
   end
 
+  def test_config_assign_array
+    @config.interfaces.ethernet('eth0').address = ['192.0.2.1/24', '2001:db8::ffff/64']
+    assert_equal(
+      "interfaces {\n" +
+      "    ethernet eth0 {\n" +
+      "        address '192.0.2.1/24'\n" +
+      "        address '2001:db8::ffff/64'\n" +
+      "    }\n" +
+      "}\n", @config.to_s
+    )
+  end
+
   def test_config_empty_string
     @config.system.login.user('vyos').authentication.plaintext_password = ''
     assert_equal(

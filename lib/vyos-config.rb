@@ -13,7 +13,11 @@ class VyOSConfig
   def []=(key, value)
     @properties ||= {}
     @properties[key] ||= []
-    @properties[key] << value
+    if value.is_a?(Array)
+      @properties[key] += value
+    else
+      @properties[key] << value
+    end
   end
 
   def [](key)
