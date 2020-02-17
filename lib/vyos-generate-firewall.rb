@@ -70,6 +70,20 @@ class VyOSFirewallGenerator
     config.firewall.state_policy.invalid.action = :drop
   end
 
+  # Convert ruby object into VyOS port string
+  def port_string(input)
+    if input
+      port = if input.is_a?(Array)
+               input.join(',')
+             elsif input.is_a?(Range)
+               "#{input.min}-#{input.max}"
+             else
+               input.to_s
+             end
+      yield(port)
+    end
+  end
+
   def generate
     zones.each_pair do |zone_name, zone_data|
       description = zone_data['description'] || "#{zone_name.to_s.titleize} Zone"

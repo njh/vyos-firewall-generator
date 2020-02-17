@@ -120,6 +120,30 @@ class TestVyOSFirewallGenerator < Minitest::Test
     assert_raises {@generator.resolve_alias('uknown-alias', :ipv4)}
   end
 
+  def test_port_string_string
+    result = false
+    @generator.port_string('53') {|str| result = str}
+    assert_equal '53', result
+  end
+
+  def test_port_string_integer
+    result = false
+    @generator.port_string(22) {|str| result = str}
+    assert_equal '22', result
+  end
+
+  def test_port_string_array
+    result = false
+    @generator.port_string([80,443]) {|str| result = str}
+    assert_equal '80,443', result
+  end
+
+  def test_port_string_range
+    result = false
+    @generator.port_string(16384..16482) {|str| result = str}
+    assert_equal '16384-16482', result
+  end
+
   def test_generate_global_stateful
     @generator.generate_global_stateful
     assert_equal fixture('global_stateful.txt'), @generator.config.to_s
@@ -143,5 +167,15 @@ class TestVyOSFirewallGenerator < Minitest::Test
   def test_generate_four_zones_no_rules_commands
     @generator.input = json_fixture('four_zones_no_rules.json')
     assert_equal fixture('four_zones_no_rules-commands.txt'), @generator.commands_string
+  end
+
+  def test_generate_simple_config
+    @generator.input = json_fixture('simple.json')
+    assert_equal fixture('simple.txt'), @generator.to_s
+  end
+
+  def test_generate_simple_commands
+    @generator.input = json_fixture('simple.json')
+    assert_equal fixture('simple-commands.txt'), @generator.commands_string
   end
 end
