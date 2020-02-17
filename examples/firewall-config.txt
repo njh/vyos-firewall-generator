@@ -1,0 +1,279 @@
+zone-policy {
+    zone PRIVATE {
+        description 'The local private LAN'
+        interface eth0
+        from PUBLIC {
+            firewall {
+                name PRIVATE-from-PUBLIC-v4
+                ipv6-name PRIVATE-from-PUBLIC-v6
+            }
+        }
+        from DMZ {
+            firewall {
+                name PRIVATE-from-DMZ-v4
+                ipv6-name PRIVATE-from-DMZ-v6
+            }
+        }
+        from LOCAL {
+            firewall {
+                name PRIVATE-from-LOCAL-v4
+                ipv6-name PRIVATE-from-LOCAL-v6
+            }
+        }
+    }
+    zone PUBLIC {
+        description 'The Internet'
+        interface eth1
+        from PRIVATE {
+            firewall {
+                name PUBLIC-from-PRIVATE-v4
+                ipv6-name PUBLIC-from-PRIVATE-v6
+            }
+        }
+        from DMZ {
+            firewall {
+                name PUBLIC-from-DMZ-v4
+                ipv6-name PUBLIC-from-DMZ-v6
+            }
+        }
+        from LOCAL {
+            firewall {
+                name PUBLIC-from-LOCAL-v4
+                ipv6-name PUBLIC-from-LOCAL-v6
+            }
+        }
+    }
+    zone DMZ {
+        description 'Screened subnet for internet facing servers'
+        interface eth2
+        from PRIVATE {
+            firewall {
+                name DMZ-from-PRIVATE-v4
+                ipv6-name DMZ-from-PRIVATE-v6
+            }
+        }
+        from PUBLIC {
+            firewall {
+                name DMZ-from-PUBLIC-v4
+                ipv6-name DMZ-from-PUBLIC-v6
+            }
+        }
+        from LOCAL {
+            firewall {
+                name DMZ-from-LOCAL-v4
+                ipv6-name DMZ-from-LOCAL-v6
+            }
+        }
+    }
+    zone LOCAL {
+        description 'The firewall itelf'
+        local-zone
+        from PRIVATE {
+            firewall {
+                name LOCAL-from-PRIVATE-v4
+                ipv6-name LOCAL-from-PRIVATE-v6
+            }
+        }
+        from PUBLIC {
+            firewall {
+                name LOCAL-from-PUBLIC-v4
+                ipv6-name LOCAL-from-PUBLIC-v6
+            }
+        }
+        from DMZ {
+            firewall {
+                name LOCAL-from-DMZ-v4
+                ipv6-name LOCAL-from-DMZ-v6
+            }
+        }
+    }
+}
+firewall {
+    name PRIVATE-from-PUBLIC-v4 {
+        default-action reject
+    }
+    ipv6-name PRIVATE-from-PUBLIC-v6 {
+        default-action reject
+    }
+    name PRIVATE-from-DMZ-v4 {
+        default-action reject
+        rule 1 {
+            description 'allow DMZ to SSH to LAN'
+            action accept
+            protocol tcp
+            destination {
+                port 22
+            }
+        }
+        rule 2 {
+            description 'allow DMZ to ping LAN'
+            action accept
+            protocol icmp
+        }
+    }
+    ipv6-name PRIVATE-from-DMZ-v6 {
+        default-action reject
+        rule 1 {
+            description 'allow DMZ to SSH to LAN'
+            action accept
+            protocol tcp
+            destination {
+                port 22
+            }
+        }
+        rule 2 {
+            description 'allow DMZ to ping LAN'
+            action accept
+            protocol icmp
+        }
+    }
+    name PRIVATE-from-LOCAL-v4 {
+        default-action accept
+    }
+    ipv6-name PRIVATE-from-LOCAL-v6 {
+        default-action accept
+    }
+    name PUBLIC-from-PRIVATE-v4 {
+        default-action accept
+    }
+    ipv6-name PUBLIC-from-PRIVATE-v6 {
+        default-action accept
+    }
+    name PUBLIC-from-DMZ-v4 {
+        default-action accept
+    }
+    ipv6-name PUBLIC-from-DMZ-v6 {
+        default-action accept
+    }
+    name PUBLIC-from-LOCAL-v4 {
+        default-action accept
+    }
+    ipv6-name PUBLIC-from-LOCAL-v6 {
+        default-action accept
+    }
+    name DMZ-from-PRIVATE-v4 {
+        default-action accept
+    }
+    ipv6-name DMZ-from-PRIVATE-v6 {
+        default-action accept
+    }
+    name DMZ-from-PUBLIC-v4 {
+        default-action reject
+        rule 1 {
+            description 'allow SSH to server1 from the Internet'
+            action accept
+            protocol tcp
+            destination {
+                address '203.0.113.40'
+                port 22
+            }
+        }
+        rule 2 {
+            description 'allow HTTP/HTTPS to server1 from the Internet'
+            action accept
+            protocol tcp
+            destination {
+                address '203.0.113.40'
+                port '80,443'
+            }
+        }
+        rule 3 {
+            description 'allow SMTP to server2 from the Internet'
+            action accept
+            protocol tcp
+            destination {
+                address '203.0.113.45'
+                address '203.0.113.46'
+                port 25
+            }
+        }
+    }
+    ipv6-name DMZ-from-PUBLIC-v6 {
+        default-action reject
+        rule 1 {
+            description 'allow SSH to server1 from the Internet'
+            action accept
+            protocol tcp
+            destination {
+                address '2001:0DB8:DEAD::40'
+                port 22
+            }
+        }
+        rule 2 {
+            description 'allow HTTP/HTTPS to server1 from the Internet'
+            action accept
+            protocol tcp
+            destination {
+                address '2001:0DB8:DEAD::40'
+                port '80,443'
+            }
+        }
+    }
+    name DMZ-from-LOCAL-v4 {
+        default-action accept
+    }
+    ipv6-name DMZ-from-LOCAL-v6 {
+        default-action accept
+    }
+    name LOCAL-from-PRIVATE-v4 {
+        default-action accept
+        rule 1 {
+            description 'allow LAN to SSH into firewall (anti-lockout rule)'
+            action accept
+            protocol tcp
+            destination {
+                port 22
+            }
+        }
+    }
+    ipv6-name LOCAL-from-PRIVATE-v6 {
+        default-action accept
+        rule 1 {
+            description 'allow LAN to SSH into firewall (anti-lockout rule)'
+            action accept
+            protocol tcp
+            destination {
+                port 22
+            }
+        }
+    }
+    name LOCAL-from-PUBLIC-v4 {
+        default-action reject
+    }
+    ipv6-name LOCAL-from-PUBLIC-v6 {
+        default-action reject
+    }
+    name LOCAL-from-DMZ-v4 {
+        default-action accept
+        rule 1 {
+            description 'allow DMZ to do DNS lookups to firewall'
+            action accept
+            protocol udp
+            destination {
+                port 53
+            }
+        }
+    }
+    ipv6-name LOCAL-from-DMZ-v6 {
+        default-action accept
+        rule 1 {
+            description 'allow DMZ to do DNS lookups to firewall'
+            action accept
+            protocol udp
+            destination {
+                port 53
+            }
+        }
+    }
+    state-policy {
+        established {
+            action accept
+        }
+        related {
+            action accept
+        }
+        invalid {
+            action drop
+        }
+    }
+}

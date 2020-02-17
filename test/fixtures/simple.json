@@ -25,5 +25,20 @@
     "server3": [
       "2001:0DB8:DEAD::60"
     ]
+  },
+  "rules": {
+    "PRIVATE-from-PUBLIC": [
+      {
+        "description": "Allow Internet to SSH to server3",
+        "action": "accept",
+        "destination-port": 22,
+        "destination-address": "server3"
+      },
+      {
+        "description": "Allow Internet to ping LAN",
+        "action": "accept",
+        "protocol": "icmp"
+      }
+    ]
   }
 }

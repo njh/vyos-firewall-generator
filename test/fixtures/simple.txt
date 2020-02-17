@@ -1,0 +1,66 @@
+zone-policy {
+    zone PUBLIC {
+        description 'The Internet'
+        interface eth0
+        from PRIVATE {
+            firewall {
+                name PUBLIC-from-PRIVATE-v4
+                ipv6-name PUBLIC-from-PRIVATE-v6
+            }
+        }
+    }
+    zone PRIVATE {
+        description 'The local private LAN'
+        interface eth1
+        from PUBLIC {
+            firewall {
+                name PRIVATE-from-PUBLIC-v4
+                ipv6-name PRIVATE-from-PUBLIC-v6
+            }
+        }
+    }
+}
+firewall {
+    name PUBLIC-from-PRIVATE-v4 {
+        default-action accept
+    }
+    ipv6-name PUBLIC-from-PRIVATE-v6 {
+        default-action accept
+    }
+    name PRIVATE-from-PUBLIC-v4 {
+        default-action reject
+        rule 2 {
+            description 'Allow Internet to ping LAN'
+            action accept
+            protocol icmp
+        }
+    }
+    ipv6-name PRIVATE-from-PUBLIC-v6 {
+        default-action reject
+        rule 1 {
+            description 'Allow Internet to SSH to server3'
+            action accept
+            protocol tcp
+            destination {
+                address '2001:0DB8:DEAD::60'
+                port 22
+            }
+        }
+        rule 2 {
+            description 'Allow Internet to ping LAN'
+            action accept
+            protocol icmp
+        }
+    }
+    state-policy {
+        established {
+            action accept
+        }
+        related {
+            action accept
+        }
+        invalid {
+            action drop
+        }
+    }
+}

@@ -1,0 +1,26 @@
+set zone-policy zone PUBLIC description 'The Internet'
+set zone-policy zone PUBLIC interface eth0
+set zone-policy zone PUBLIC from PRIVATE firewall name PUBLIC-from-PRIVATE-v4
+set zone-policy zone PUBLIC from PRIVATE firewall ipv6-name PUBLIC-from-PRIVATE-v6
+set zone-policy zone PRIVATE description 'The local private LAN'
+set zone-policy zone PRIVATE interface eth1
+set zone-policy zone PRIVATE from PUBLIC firewall name PRIVATE-from-PUBLIC-v4
+set zone-policy zone PRIVATE from PUBLIC firewall ipv6-name PRIVATE-from-PUBLIC-v6
+set firewall name PUBLIC-from-PRIVATE-v4 default-action accept
+set firewall ipv6-name PUBLIC-from-PRIVATE-v6 default-action accept
+set firewall name PRIVATE-from-PUBLIC-v4 default-action reject
+set firewall name PRIVATE-from-PUBLIC-v4 rule 2 description 'Allow Internet to ping LAN'
+set firewall name PRIVATE-from-PUBLIC-v4 rule 2 action accept
+set firewall name PRIVATE-from-PUBLIC-v4 rule 2 protocol icmp
+set firewall ipv6-name PRIVATE-from-PUBLIC-v6 default-action reject
+set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1 description 'Allow Internet to SSH to server3'
+set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1 action accept
+set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1 protocol tcp
+set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1 destination address '2001:0DB8:DEAD::60'
+set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1 destination port 22
+set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 2 description 'Allow Internet to ping LAN'
+set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 2 action accept
+set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 2 protocol icmp
+set firewall state-policy established action accept
+set firewall state-policy related action accept
+set firewall state-policy invalid action drop

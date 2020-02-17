@@ -84,6 +84,40 @@ class VyOSFirewallGenerator
     end
   end
 
+  def generate_firewall_rules(name, ipvers, rules)
+    return if rules.nil? or rules.empty?
+    name_dec = (ipvers == :ipv6 ? 'ipv6-name' : 'name')
+
+    rules.each_with_index do |rule, index|
+      source_address = resolve_alias(rule['source-address'], ipvers)
+      destination_address = resolve_alias(rule['destination-address'], ipvers)
+
+      # Don't output rule, if it doens't apply to this IP version
+       next if rule['source-address'] && source_address.empty?
+       next if rule['destination-address'] && destination_address.empty?
+
+      config_rule = config.firewall.send(name_dec, name).rule(index + 1)
+      config_rule.description = rule['description'] if rule['description']
+
+      if !rule['action']
+        $stderr.puts "Warning: no action defined for rule"
+        next
+      end
+      config_rule.action = rule['action']
+      config_rule.protocol = rule['protocol'] || 'tcp'
+
+      config_rule.destination.address = destination_address unless destination_address.empty?
+      port_string(rule['destination-port']) do |port|
+        config_rule.destination.port = port
+      end
+
+      config_rule.source.address = source_address unless source_address.empty?
+      port_string(rule['source-port']) do |port|
+        config_rule.source.port = port
+      end
+    end
+  end
+
   def generate
     zones.each_pair do |zone_name, zone_data|
       description = zone_data['description'] || "#{zone_name.to_s.titleize} Zone"
@@ -101,7 +135,13 @@ class VyOSFirewallGenerator
         key = "#{zone_name}-from-#{from_zone}"
 
         generate_default_action("#{key}-v4", :ipv4, input['default-actions'][key])
+        unless input['rules'].nil?
+          generate_firewall_rules("#{key}-v4", :ipv4, input['rules'][key])
+        end
         generate_default_action("#{key}-v6", :ipv6, input['default-actions'][key])
+        unless input['rules'].nil?
+          generate_firewall_rules("#{key}-v6", :ipv6, input['rules'][key])
+        end
         config.zone_policy.zone(zone_name).from(from_zone).firewall.name = "#{key}-v4"
         config.zone_policy.zone(zone_name).from(from_zone).firewall.ipv6_name = "#{key}-v6"
       end
