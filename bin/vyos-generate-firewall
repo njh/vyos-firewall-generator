@@ -1,17 +1,31 @@
 #!/usr/bin/env ruby
 
-$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
+$LOAD_PATH.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
 
 require 'json'
+require 'optparse'
 require 'vyos-generate-firewall'
 
-if ARGV.count != 1
-  $stderr.puts "Usage: vyos-generate-firewall <filename.json>"
+mode = :config
+op = OptionParser.new do |opt|
+  opt.banner = 'Usage: vyos-generate-firewall [options] <input.json>'
+
+  opt.on('-c', '--config', 'Output VyOS configuration') { mode = :config }
+  opt.on('-C', '--commands', 'Output a list of VyOS commands') { mode = :commands }
+  opt.on('-h', '--help', 'Show this message') { puts opt; exit(-1) }
+end
+
+input_filename = op.parse!.first
+if input_filename.nil?
+  puts op
   exit(-1)
 end
 
-
-input = JSON.parse(File.read(ARGV[0]))
-
+input = JSON.parse(File.read(input_filename))
 generator = VyOSFirewallGenerator.new(input)
-puts generator.to_s
+
+if mode == :config
+  puts generator.to_s
+elsif mode == :commands
+  puts generator.commands_string
+end
