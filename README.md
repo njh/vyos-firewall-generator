@@ -67,6 +67,60 @@ There is an example JSON file here: [firewall.json](/examples/firewall.json)
 And example of the VyOS configuration that it generates here: [firewall-config.txt](/examples/firewall-config.txt)
 
 
+Running the Script
+------------------
+
+The script is written in [ruby] and should work with any recent ruby but I have been testing with version 2.5.5.
+
+First make sure you have [bundler] installed:
+
+    gem install bundler
+    
+The install the script's dependencies:
+
+    bundle install
+
+If you want to check that everything is working ok, you can run the test suite:
+
+    rake test
+
+Now you should be ready to run the script. To create a partial VyOS configuration file:
+
+    ./bin/vyos-generate-firewall --config examples/firewall.json > config.txt
+
+Or to create a set of VyOS commands:
+
+    ./bin/vyos-generate-firewall --commands examples/firewall.json > commands.txt
+
+
+VyOSConfig Ruby Class
+---------------------
+
+Internally there is a ruby class called `VyOSConfig`. This may be useful for other purposes, if you want to programatically create VyOS configurations.
+
+Configuration is created by chaining method calls together and then assigning values.
+
+For example the following ruby commands:
+
+```
+config = VyOSConfig.new
+config.interfaces.ethernet('eth0').address = ['192.0.2.1/24', '2001:db8::ffff/64']
+puts config.to_s
+```
+
+Results in the following configuration being generated:
+
+```
+interfaces {
+    ethernet eth0 {
+        address '192.0.2.1/24'
+        address '2001:db8::ffff/64'
+    }
+}
+```
+
+
 
 [VyOS]:  https://www.vyos.net/
-
+[ruby]:  https://www.ruby-lang.org/
+[bundler]:  https://bundler.io/
