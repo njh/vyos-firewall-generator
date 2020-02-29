@@ -33,6 +33,9 @@ firewall {
             description 'Allow Internet to ping LAN'
             action accept
             protocol icmp
+            icmp {
+                type-name echo-request
+            }
         }
     }
     ipv6-name PRIVATE-from-PUBLIC-v6 {
@@ -49,7 +52,10 @@ firewall {
         rule 2 {
             description 'Allow Internet to ping LAN'
             action accept
-            protocol icmp
+            protocol icmpv6
+            icmpv6 {
+                type echo-request
+            }
         }
     }
     state-policy {

@@ -12,6 +12,7 @@ set firewall name PRIVATE-from-PUBLIC-v4 default-action reject
 set firewall name PRIVATE-from-PUBLIC-v4 rule 2 description 'Allow Internet to ping LAN'
 set firewall name PRIVATE-from-PUBLIC-v4 rule 2 action accept
 set firewall name PRIVATE-from-PUBLIC-v4 rule 2 protocol icmp
+set firewall name PRIVATE-from-PUBLIC-v4 rule 2 icmp type-name echo-request
 set firewall ipv6-name PRIVATE-from-PUBLIC-v6 default-action reject
 set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1 description 'Allow Internet to SSH to server3'
 set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1 action accept
@@ -20,7 +21,8 @@ set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1 destination address '2001:0
 set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 1 destination port 22
 set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 2 description 'Allow Internet to ping LAN'
 set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 2 action accept
-set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 2 protocol icmp
+set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 2 protocol icmpv6
+set firewall ipv6-name PRIVATE-from-PUBLIC-v6 rule 2 icmpv6 type echo-request
 set firewall state-policy established action accept
 set firewall state-policy related action accept
 set firewall state-policy invalid action drop

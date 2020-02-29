@@ -104,7 +104,23 @@ class VyOSFirewallGenerator
         next
       end
       config_rule.action = rule['action']
-      config_rule.protocol = rule['protocol'] || 'tcp'
+
+      if rule['protocol'] == 'ping'
+        # Only allow ICMP ping requests
+        if ipvers == :ipv4
+          config_rule.protocol = 'icmp'
+          config_rule.icmp.type_name = 'echo-request'
+        else
+          config_rule.protocol = 'icmpv6'
+          config_rule.icmpv6.type = 'echo-request'
+        end
+      elsif ipvers == :ipv6 && rule['protocol'] == 'icmp'
+        config_rule.protocol = 'icmpv6'
+      elsif rule['protocol']
+        config_rule.protocol = rule['protocol']
+      else
+        config_rule.protocol = 'tcp'
+      end
 
       config_rule.destination.address = destination_address unless destination_address.empty?
       port_string(rule['destination-port']) do |port|
